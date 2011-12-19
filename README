@@ -1,0 +1,8 @@
+EC2-Spot-Price-Value
+====================
+
+This stupid little script was designed to figure out whether it is more 
+cost effective to run my server on spot instances or on reserved instances.
+My server must be up 100% and cannot tolerate downtime. 
+
+See the included demo images for an example of what is generated.
