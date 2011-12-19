@@ -14,8 +14,8 @@ clear;
 OS = 'Linux/UNIX';
 
 % availability zones
-zone = 'us-east-1b';
-region = 'us-east-1';
+zone = 'us-west-1b';
+region = zone(1:length(zone)-1);
 
 % m1.small | m1.large | m1.xlarge | c1.medium | c1.xlarge | m2.xlarge | m2.2xlarge | m2.4xlarge | t1.micro
 type = 't1.micro';     
