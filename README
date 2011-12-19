@@ -3,6 +3,15 @@ EC2-Spot-Price-Value
 
 This stupid little script was designed to figure out whether it is more 
 cost effective to run my server on spot instances or on reserved instances.
-My server must be up 100% and cannot tolerate downtime. 
+It calculates cumulative spot cost over the last 90 days and also charts the
+spot price, and projects that cost to a full year.
+
+My server must be up 100% and cannot tolerate downtime, so I can compare the
+projected cost to reserved instance cost. Historically, the spot price has
+been pretty stable and almost equal to the reserved instance hourly price,
+without the overhead of the reserved instance one time fee. However, spot
+prices have been fluctuating greatly in the last few months (Q3 2011) so it
+is now more efficient to buy a reserved instance (especially since Heavy
+Utilization instances became available).
 
 See the included demo images for an example of what is generated.
