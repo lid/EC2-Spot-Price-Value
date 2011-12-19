@@ -2,23 +2,31 @@
 % [lid, 2011/18/12]
 % integrate spot price and project the total cost for a year
 % 
-clear
-% ec2-describe-spot-price-history --start-time 2010-12-18T00:00:00+0000 --instance-type t1.micro --product-description Linux/UNIX --end-time 2011-12-18T00:00:00+0000 --availability-zone us-east-1b 
+% You will need Amazon's EC2 API Tools installed, with the appropriate
+%   authentication environment variables set. 
+% Sample shell command that should work before you try to run this script:
+%   ec2-describe-spot-price-history --start-time 2010-12-18T00:00:00+0000 --instance-type t1.micro --product-description Linux/UNIX --end-time 2011-12-18T00:00:00+0000 --availability-zone us-east-1b 
 
-apiCmd = 'source ~/.bash_profile; ec2-describe-spot-price-history';
+clear;
 
+%--- Config
 % Linux/UNIX | SUSE Linux | Windows | Linux/UNIX (Amazon VPC) | SUSE Linux (Amazon VPC) | Windows (Amazon VPC)
 OS = 'Linux/UNIX';
 
 % availability zones
-zone = 'us-east-1f';
+zone = 'us-east-1b';
 region = 'us-east-1';
 
 % m1.small | m1.large | m1.xlarge | c1.medium | c1.xlarge | m2.xlarge | m2.2xlarge | m2.4xlarge | t1.micro
 type = 't1.micro';     
 
+
+%--- Pull data
+% need to source .bash_profile, or else shell does not pull in env vars
+apiCmd = 'source ~/.bash_profile; ec2-describe-spot-price-history';
 file = 'spots_data.tmp';
 
+% Amazon's API  lets you fetch up to the last 90 days of data
 cmdToRun = [apiCmd  ' --start-time 2000-12-18T00:00:00+0000 -t ' type ' -a ' zone ' -d ' OS ' --region ' region ' > ' file];
 disp(cmdToRun);
 fprintf('Fetching data... ');
@@ -28,6 +36,7 @@ if (status ~= 0)
 end
 fprintf('done.\n');
 
+%--- Parse data
 fid = fopen(file,'r');
 
 if (fid == -1)
@@ -57,7 +66,7 @@ totalCost = sum(cost);
 hoursInYear = 365*24;
 costPerYear = hoursInYear/sum(intervalHours)*totalCost;
 
-% generate plots
+%--- Generate plots
 xlabels = fixedT - max(fixedT);
 clf;
 [AX,H1,H2] = plotyy(xlabels(1:numEntries-1),sum(cost)-cumsum(cost),xlabels(1:numEntries-1),cost);
